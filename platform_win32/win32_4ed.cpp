@@ -1668,9 +1668,6 @@ win32_gl_create_window(HWND *wnd_out, HGLRC *context_out, DWORD style, RECT rect
                 DestroyWindow(wnd);
                 SetLastError(error);
             }
-            else{
-                ReleaseDC(wnd, dc);
-            }
         }
     }
     
