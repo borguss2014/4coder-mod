@@ -335,6 +335,8 @@ system_get_file_list_sig(){
             result.infos[counter] = node;
             counter += 1;
         }
+		
+		FindClose(search);
     }
     
     return(result);
