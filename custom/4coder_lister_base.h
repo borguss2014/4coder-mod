@@ -44,6 +44,7 @@ typedef Lister_Activation_Code Lister_Key_Stroke_Function(Application_Links *app
 typedef void Lister_Navigate_Function(Application_Links *app,
                                       View_ID view, struct Lister *lister,
                                       i32 index_delta);
+typedef Lister_Activation_Code Lister_Paste_Function(Application_Links *app);    
 
 struct Lister_Handlers{
     Lister_Regenerate_List_Function_Type *refresh;
@@ -51,6 +52,7 @@ struct Lister_Handlers{
     Custom_Command_Function *backspace;
     Lister_Navigate_Function *navigate;
     Lister_Key_Stroke_Function *key_stroke;
+	Lister_Paste_Function *paste;
 };
 
 struct Lister_Result{
