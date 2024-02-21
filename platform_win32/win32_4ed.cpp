@@ -9,9 +9,6 @@
 
 // TOP
 
-#define FPS 60
-#define frame_useconds (1000000 / FPS)
-
 #include <stdio.h>
 
 #include "4coder_base_types.h"
@@ -306,7 +303,23 @@ system_schedule_step(u32 code){
     PostMessage(win32vars.window_handle, WM_4coder_ANIMATE, code, 0);
 }
 
-////////////////////////////////
+// Query win32 API to get monitor refresh rate
+internal u64
+win32_get_frame_rate() {
+    u64 frame_rate = 60;
+
+    DEVMODE device_mode = { 0 };
+    // memset(&device_mode, 0, sizeof(DEVMODE));
+    device_mode.dmSize = sizeof(DEVMODE);
+    device_mode.dmDriverExtra = 0;
+
+    // If the Display settings can be retrieved use the device's refresh rate
+    if(EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &device_mode) != 0){
+        frame_rate = device_mode.dmDisplayFrequency;
+    }
+
+    return frame_rate;
+}
 
 internal void
 win32_toggle_fullscreen(){
@@ -2006,6 +2019,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdS
     SetForegroundWindow(win32vars.window_handle);
     SetActiveWindow(win32vars.window_handle);
     ShowWindow(win32vars.window_handle, SW_SHOW);
+	
+	u64 frame_rate = win32_get_frame_rate();
+    u64 frame_useconds = (1000000 / frame_rate);
     
     win32vars.global_frame_mutex = system_mutex_make();
     system_acquire_global_frame_mutex(win32vars.tctx);
