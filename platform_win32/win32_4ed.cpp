@@ -315,7 +315,9 @@ win32_get_frame_rate() {
 
     // If the Display settings can be retrieved use the device's refresh rate
     if(EnumDisplaySettings(NULL, ENUM_CURRENT_SETTINGS, &device_mode) != 0){
-        frame_rate = device_mode.dmDisplayFrequency;
+        if (device_mode.dmDisplayFrequency >= 10) {
+            frame_rate = device_mode.dmDisplayFrequency;
+        }
     }
 
     return frame_rate;
